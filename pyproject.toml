@@ -1,0 +1,30 @@
+[project]
+name = "geospatial-utils"
+version = "0.1.0"
+description = "Set of geospatial utilies"
+readme = "README.md"
+requires-python = "==3.13.5"
+dependencies = [
+    "basedpyright>=1.31.1",
+    "loguru>=0.7.3",
+    "ruff",
+]
+
+[tool.ruff]
+target-version = "py313"
+
+# Default + isort + pyupgrade
+lint.select = [
+    "E4", "E7", "E9", "F", "I", "UP"
+]
+extend-exclude = [
+]
+line-length = 88
+
+[tool.basedpyright]
+typeCheckingMode = "standard"
+
+exclude = [
+  "**/__pycache__",
+  "**/.*",
+]
