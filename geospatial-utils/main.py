@@ -1,8 +1,10 @@
 import argparse
+import json
+import pathlib
+import fileutils
 import os
 import sys
-
-import fileutils
+from fileutils import ed269
 from loguru import logger
 
 version = os.environ.get("GEOSPATIAL_UTILS_VERSION", "unknown")
@@ -36,8 +38,14 @@ def main():
         logger.debug(f"Converting {args.input_url} to {args.output_file}")
         source = fileutils.get(args.input_url, int(args.ttl))
         logger.debug(f"Local input copy: {source.absolute()}")
-        # destination = pathlib.Path(args.output_file)
 
+        data = ed269.loads(source)
+        # output = pathlib.Path(args.output_file)
+        # output.write_text(json.dumps(data, indent=2))
+
+        logger.debug(json.dumps(data, indent=2))
+        logger.error("Work in progress. The parser has not been fully implemented yet. The ED269 parser output was printed above for inspection. (debug log level required)")
+        sys.exit(1)
     else:
         parser.print_help()
         sys.exit(1)
