@@ -1,9 +1,12 @@
 import argparse
 import json
-import pathlib
-import fileutils
 import os
+import pathlib
 import sys
+
+import config
+import convert
+import fileutils
 from fileutils import ed269
 from loguru import logger
 
@@ -39,13 +42,15 @@ def main():
         source = fileutils.get(args.input_url, int(args.ttl))
         logger.debug(f"Local input copy: {source.absolute()}")
 
-        data = ed269.loads(source)
-        # output = pathlib.Path(args.output_file)
-        # output.write_text(json.dumps(data, indent=2))
+        ed269_data = ed269.loads(source)
+        # TODO: Move hard-coded configuration to a json file.
+        logger.warning("Additional data not provided in ED269 is hard-coded with Swiss FOCA information. This will be moved to a configurable file in the near future.")
+        ed318_data = convert.from_ed269_to_ed318(ed269_data, config=config.FOCA)
+        output = pathlib.Path(args.output_file)
+        output.write_text(json.dumps(ed318_data), encoding="utf-8")
 
-        logger.debug(json.dumps(data, indent=2))
-        logger.error("Work in progress. The parser has not been fully implemented yet. The ED269 parser output was printed above for inspection. (debug log level required)")
-        sys.exit(1)
+        logger.info(f"Successful conversion. ED-318 saved to {output.absolute()}")
+
     else:
         parser.print_help()
         sys.exit(1)
